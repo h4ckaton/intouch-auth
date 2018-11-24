@@ -16,7 +16,7 @@ class PasswordEncoderConfig {
     }
 
     @Bean
-    fun passwordEncoder() = BCryptPasswordEncoder(com.intouch.auth.config.PasswordEncoderConfig.Companion.BCRYPT_ITERATIONS)
+    fun passwordEncoder() = BCryptPasswordEncoder(BCRYPT_ITERATIONS)
 
     @Bean
     fun secureRandom(): SecureRandom = SecureRandom.getInstanceStrong()

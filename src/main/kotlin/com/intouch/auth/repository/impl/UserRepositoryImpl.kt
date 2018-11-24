@@ -6,10 +6,10 @@ package com.intouch.auth.repository.impl
 
 import arrow.core.Try
 import arrow.core.toOption
+import com.intouch.auth.findBy
 import com.intouch.auth.model.UserEntity
+import com.intouch.auth.repository.AbstractRepository
 import com.intouch.auth.repository.UserRepository
-import com.intouch.microbase.findBy
-import com.intouch.microbase.repository.AbstractRepository
 import org.springframework.stereotype.Repository
 
 @Repository

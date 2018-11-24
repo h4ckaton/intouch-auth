@@ -1,14 +1,14 @@
 /*
- * Copyright (c) 2018 This file is subject to the terms and conditions defined in file 'LICENSE.txt' which is part of this source code package.
+ * Copyright (c) 2018. This file is subject to the terms and conditions defined in file 'LICENSE.txt' which is part of this source code package.
  */
 
 package com.intouch.auth.repository.impl
 
 import arrow.core.toOption
+import com.intouch.auth.findBy
 import com.intouch.auth.model.RoleEntity
+import com.intouch.auth.repository.AbstractRepository
 import com.intouch.auth.repository.RoleRepository
-import com.intouch.microbase.findBy
-import com.intouch.microbase.repository.AbstractRepository
 import org.springframework.stereotype.Repository
 
 @Repository

@@ -1,9 +1,13 @@
 /*
- * Copyright (c) 2018. This file is subject to the terms and conditions defined in file 'LICENSE.txt' which is part of this source code package.
+ * Copyright (c) 2018 This file is subject to the terms and conditions defined in file 'LICENSE.txt' which is part of this source code package.
  */
 
 package com.intouch.auth.controller
 
+
+import com.intouch.auth.postResponse
+import com.intouch.auth.putResponse
+import com.intouch.auth.security.SecurityConstants.REFRESH_TOKEN
 import com.intouch.auth.security.User
 import com.intouch.auth.security.service.JwtTokenService
 import com.intouch.auth.service.DeviceService
@@ -19,9 +23,6 @@ import com.intouch.lib.auth.dto.AuthenticationRequest
 import com.intouch.lib.auth.dto.AuthenticationResponse
 import com.intouch.lib.auth.dto.RegisterRequest
 import com.intouch.lib.auth.dto.RegisterResponse
-import com.intouch.microbase.postResponse
-import com.intouch.microbase.putResponse
-import com.intouch.microbase.security.SecurityConstants.REFRESH_TOKEN
 import io.swagger.annotations.Api
 import org.modelmapper.ModelMapper
 import org.springframework.http.HttpStatus
@@ -30,9 +31,9 @@ import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.security.core.Authentication
 import org.springframework.web.bind.annotation.*
 
-@Api("Auth Controller")
+@Api("User Controller")
 @RestController
-class AuthController(private var userService: UserService,
+class UserController(private var userService: UserService,
                      private var jwtTokenService: JwtTokenService,
                      private var deviceService: DeviceService,
                      private var modelMapper: ModelMapper) {
@@ -46,12 +47,6 @@ class AuthController(private var userService: UserService,
     fun login(@RequestBody authenticationRequest: AuthenticationRequest) {
     }
 
-    @GetMapping("/auth/test")
-    fun test(authentication: Authentication): String {
-        val user = (authentication.principal as User)
-        return "${user.userId}  ${user.deviceId}"
-    }
-
     @GetMapping(REVOKE)
     @PreAuthorize("hasRole('$REFRESH_TOKEN')")
     fun revoke(authentication: Authentication): ResponseEntity<AuthenticationResponse> {
@@ -61,13 +56,11 @@ class AuthController(private var userService: UserService,
 
     @PutMapping(LOGOUT)
     @PreAuthorize("hasRole('${Roles.USER}')")
-    fun logout(authentication: Authentication) =
-            putResponse(deviceService.logout((authentication.principal as User).deviceId))
+    fun logout(authentication: Authentication) = putResponse(deviceService.logout((authentication.principal as User).deviceEntity))
 
     @PutMapping(LOGOUT_ALL)
     @PreAuthorize("hasRole('${Roles.USER}')")
-    fun logoutAll(authentication: Authentication) =
-            putResponse(deviceService.logoutAllDevices((authentication.principal as User).userId))
+    fun logoutAll(authentication: Authentication) = putResponse(deviceService.logoutAllDevices((authentication.principal as User).userEntity))
 
     @PostMapping(RESET_PASSWORD)
     fun resetPassword(mail: String) {

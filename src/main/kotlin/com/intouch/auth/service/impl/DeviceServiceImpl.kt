@@ -5,6 +5,7 @@
 package com.intouch.auth.service.impl
 
 import com.intouch.auth.model.DeviceEntity
+import com.intouch.auth.model.UserEntity
 import com.intouch.auth.repository.DeviceRepository
 import com.intouch.auth.security.generateSecret
 import com.intouch.auth.service.DeviceService
@@ -25,14 +26,14 @@ class DeviceServiceImpl(private val deviceRepository: DeviceRepository) : Device
             }
 
     @Transactional
-    override fun logoutAllDevices(userId: Long): Boolean {
+    override fun logoutAllDevices(userEntity: UserEntity): Boolean {
         SecurityContextHolder.getContext().authentication = null
-        return deviceRepository.delete(userId).isSuccess()
+        return deviceRepository.delete(userEntity.id).isSuccess()
     }
 
     @Transactional
-    override fun logout(deviceId: Long): Boolean {
+    override fun logout(deviceEntity: DeviceEntity): Boolean {
         SecurityContextHolder.getContext().authentication = null
-        return deviceRepository.delete(deviceRepository.find(deviceId)).isSuccess()
+        return deviceRepository.delete(deviceEntity).isSuccess()
     }
 }

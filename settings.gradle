@@ -1,6 +1,5 @@
 rootProject.name = 'intouch-auth'
 
-include ':intouch-microbase', ':intouch-lib'
-project(':intouch-microbase').projectDir = new File(settingsDir, '../intouch-microbase')
+include ':intouch-lib'
 project(':intouch-lib').projectDir = new File(settingsDir, '../intouch-lib')
 

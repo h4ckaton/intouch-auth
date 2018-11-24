@@ -6,6 +6,8 @@ package com.intouch.auth.config
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
+import com.intouch.auth.repository.DeviceRepository
+import com.intouch.auth.repository.UserRepository
 import com.intouch.auth.security.filter.JwtAuthenticationFilter
 import com.intouch.auth.security.filter.JwtAuthorizationFilter
 import com.intouch.auth.security.service.JwtTokenService
@@ -35,7 +37,9 @@ import java.util.*
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 class WebSecurityConfig(
+        val userRepository: UserRepository,
         val jwtTokenService: JwtTokenService,
+        val deviceRepository: DeviceRepository,
         val userDetailsService: UserDetailsService,
         val passwordEncoder: PasswordEncoder) : WebSecurityConfigurerAdapter() {
     companion object {
@@ -43,13 +47,13 @@ class WebSecurityConfig(
     }
 
     override fun configure(http: HttpSecurity) {
-        val authorizationFilter = JwtAuthorizationFilter(authenticationManager(), base64Decoder())
+        val authorizationFilter = JwtAuthorizationFilter(authenticationManager(), base64Decoder(), userRepository, deviceRepository)
         val authenticationFilter = JwtAuthenticationFilter("/$LOGIN", authenticationManager(), jwtTokenService)
-        http.cors().and().csrf().disable().authorizeRequests().antMatchers(*com.intouch.auth.config.WebSecurityConfig.Companion.AUTH_WHITELIST).permitAll()
+        http.cors().and().csrf().disable().authorizeRequests().antMatchers(*AUTH_WHITELIST).permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter::class.java)
-                .addFilterAfter(authorizationFilter, UsernamePasswordAuthenticationFilter::class.java)
+                .addFilterBefore(authorizationFilter, UsernamePasswordAuthenticationFilter::class.java)
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
     }
 
@@ -72,7 +76,6 @@ class WebSecurityConfig(
     @Bean
     @Primary
     fun jsonObjectMapper(): ObjectMapper = Jackson2ObjectMapperBuilder.json()
-            .modules(JavaTimeModule())
             .build()
 
     @Bean

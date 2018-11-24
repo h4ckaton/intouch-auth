@@ -4,22 +4,13 @@
 
 package com.intouch.auth.security
 
-import org.springframework.security.core.GrantedAuthority
+import com.intouch.auth.model.DeviceEntity
+import com.intouch.auth.model.UserEntity
 import org.springframework.security.core.userdetails.UserDetails
 
-class User(val userId: Long,
-           val deviceId: Long,
-           private val grantedAuthorities: List<GrantedAuthority>) : UserDetails {
-    lateinit var name: String
-    lateinit var passwordHash: String
-
-    constructor(userEntity: com.intouch.auth.model.UserEntity, deviceId: Long) : this(userEntity.id, deviceId, userEntity.getAuthorities().toList()) {
-        name = userEntity.name
-        passwordHash = userEntity.passwordHash
-    }
-
-
-    override fun getUsername() = name
+class User(val userEntity: UserEntity,
+           val deviceEntity: DeviceEntity) : UserDetails {
+    override fun getUsername() = userEntity.name
 
     override fun isCredentialsNonExpired() = true
 
@@ -27,9 +18,9 @@ class User(val userId: Long,
 
     override fun isAccountNonLocked() = true
 
-    override fun isEnabled() = true
+    override fun getAuthorities() = userEntity.getAuthorities()
 
-    override fun getPassword() = passwordHash
+    override fun isEnabled() = userEntity.enabled
 
-    override fun getAuthorities() = grantedAuthorities
+    override fun getPassword() = userEntity.passwordHash
 }

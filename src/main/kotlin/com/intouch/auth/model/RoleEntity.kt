@@ -4,7 +4,7 @@
 
 package com.intouch.auth.model
 
-import com.intouch.microbase.config.DatabaseConfig.Companion.SCHEMA
+import com.intouch.auth.config.DatabaseConfig.Companion.SCHEMA
 import org.springframework.security.core.GrantedAuthority
 import javax.persistence.*
 

@@ -4,19 +4,21 @@
 
 package com.intouch.auth.repository.impl
 
+import arrow.core.Option
 import arrow.core.Try
+import arrow.core.toOption
+import com.intouch.auth.findBy
 import com.intouch.auth.model.DeviceEntity
+import com.intouch.auth.remove
+import com.intouch.auth.repository.AbstractRepository
 import com.intouch.auth.repository.DeviceRepository
-import com.intouch.microbase.findBy
-import com.intouch.microbase.remove
-import com.intouch.microbase.repository.AbstractRepository
 import org.springframework.stereotype.Repository
 
 @Repository
 class DeviceRepositoryImpl : DeviceRepository, AbstractRepository() {
     override fun add(deviceEntity: DeviceEntity) = Try { entityManager.persist(deviceEntity) }
 
-    override fun find(deviceId: Long): DeviceEntity = entityManager.findBy(DeviceEntity.ID, deviceId)
+    override fun find(deviceId: Long): Option<DeviceEntity> = entityManager.findBy<DeviceEntity, Long>(DeviceEntity.ID, deviceId).toOption()
 
     override fun delete(userId: Long) = Try { entityManager.remove<DeviceEntity, Long>(DeviceEntity.USER_ID, userId) }
 

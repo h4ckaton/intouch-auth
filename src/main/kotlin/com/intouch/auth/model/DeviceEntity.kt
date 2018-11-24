@@ -4,8 +4,8 @@
 
 package com.intouch.auth.model
 
+import com.intouch.auth.config.DatabaseConfig.Companion.SCHEMA
 import com.intouch.auth.security.generateSecret
-import com.intouch.microbase.config.DatabaseConfig.Companion.SCHEMA
 import javax.persistence.*
 
 @Entity

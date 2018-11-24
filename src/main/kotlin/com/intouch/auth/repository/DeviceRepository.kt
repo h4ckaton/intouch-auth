@@ -4,6 +4,7 @@
 
 package com.intouch.auth.repository
 
+import arrow.core.Option
 import arrow.core.Try
 import com.intouch.auth.model.DeviceEntity
 
@@ -16,5 +17,5 @@ interface DeviceRepository {
 
     fun delete(userId: Long): Try<Int>
 
-    fun find(deviceId: Long): DeviceEntity
+    fun find(deviceId: Long): Option<DeviceEntity>
 }

@@ -5,6 +5,7 @@
 package com.intouch.auth.service
 
 import com.intouch.auth.model.DeviceEntity
+import com.intouch.auth.model.UserEntity
 
 interface DeviceService {
     /**
@@ -12,7 +13,7 @@ interface DeviceService {
      */
     fun generateSecrets(deviceEntity: DeviceEntity): Pair<String, String>
 
-    fun logout(deviceId: Long): Boolean
+    fun logout(deviceEntity: DeviceEntity): Boolean
 
-    fun logoutAllDevices(userId: Long): Boolean
+    fun logoutAllDevices(userEntity: UserEntity): Boolean
 }
